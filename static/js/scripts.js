@@ -27,6 +27,53 @@ window.addEventListener('DOMContentLoaded', event => {
         });
     });
 
+    // ---- Navbar shadow on scroll ----
+    const header = document.querySelector('.header');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+
+    // ---- Scroll fade-in animation ----
+    const fadeInSections = document.querySelectorAll('.fade-in-section');
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.12
+    };
+
+    const fadeInObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                fadeInObserver.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    fadeInSections.forEach(section => {
+        fadeInObserver.observe(section);
+    });
+
+    // ---- Back to Top button ----
+    const backToTopBtn = document.getElementById('backToTop');
+    if (backToTopBtn) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 400) {
+                backToTopBtn.classList.add('show');
+            } else {
+                backToTopBtn.classList.remove('show');
+            }
+        });
+
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
 
     // Yaml
     fetch(content_dir + config_file + (location.protocol === 'file:' ? '' : '?v=' + new Date().getTime()))
